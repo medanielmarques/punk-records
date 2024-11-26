@@ -21,8 +21,11 @@ type Task = {
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>(() => {
-    const savedTasks = localStorage.getItem("tasks")
-    return savedTasks ? JSON.parse(savedTasks) : []
+    if (typeof window !== "undefined") {
+      const savedTasks = localStorage.getItem("tasks")
+      return savedTasks ? JSON.parse(savedTasks) : []
+    }
+    return []
   })
   const [newTask, setNewTask] = useState("")
   const [newTime, setNewTime] = useState(30) // Default 30 minutes
@@ -30,7 +33,9 @@ export default function Home() {
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks))
+    if (typeof window !== "undefined") {
+      localStorage.setItem("tasks", JSON.stringify(tasks))
+    }
   }, [tasks])
 
   useEffect(() => {
