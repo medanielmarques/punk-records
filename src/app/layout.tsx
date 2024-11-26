@@ -1,15 +1,13 @@
-import "@/styles/globals.css";
-
-import { GeistSans } from "geist/font/sans";
-import { type Metadata } from "next";
-
-import { TRPCReactProvider } from "@/trpc/react";
+import "@/styles/globals.css"
+import { TRPCReactProvider } from "@/trpc/react"
+import { GeistSans } from "geist/font/sans"
+import { type Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Punk Records",
   description: "Punk Records",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
-};
+}
 
 export default function RootLayout({
   children,
@@ -20,5 +18,5 @@ export default function RootLayout({
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
-  );
+  )
 }

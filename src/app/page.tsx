@@ -1,77 +1,77 @@
-"use client";
+"use client"
 
-import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
-  DropdownMenu,         
+  DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuTrigger,
   DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
+import { useEffect, useRef, useState } from "react"
 
 type Task = {
-  id: number;
-  text: string;
-  timeRemaining: number;
-  completed: boolean;
-  paused: boolean;
-};
+  id: number
+  text: string
+  timeRemaining: number
+  completed: boolean
+  paused: boolean
+}
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>(() => {
-    const savedTasks = localStorage.getItem("tasks");
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
-  const [newTask, setNewTask] = useState("");
-  const [newTime, setNewTime] = useState(30); // Default 30 minutes
-  const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+    const savedTasks = localStorage.getItem("tasks")
+    return savedTasks ? JSON.parse(savedTasks) : []
+  })
+  const [newTask, setNewTask] = useState("")
+  const [newTime, setNewTime] = useState(30) // Default 30 minutes
+  const [openDropdownId, setOpenDropdownId] = useState<number | null>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+    localStorage.setItem("tasks", JSON.stringify(tasks))
+  }, [tasks])
 
   useEffect(() => {
     // Focus input on mount
-    inputRef.current?.focus();
-  }, []);
+    inputRef.current?.focus()
+  }, [])
 
   useEffect(() => {
     // Find the first active task
     const activeTask = tasks.find(
       (task) => !task.completed && !task.paused && task.timeRemaining > 0,
-    );
+    )
 
-    let timer: NodeJS.Timeout | undefined;
+    let timer: NodeJS.Timeout | undefined
     if (activeTask) {
       timer = setInterval(() => {
         setTasks((prevTasks: Task[]) =>
           prevTasks.map((t) => {
             if (t.id === activeTask.id && t.timeRemaining > 0) {
-              const newTime = t.timeRemaining - 1;
+              const newTime = t.timeRemaining - 1
               if (newTime === 0) {
                 new Audio(
                   "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3",
-                ).play();
+                ).play()
               }
-              return { ...t, timeRemaining: newTime };
+              return { ...t, timeRemaining: newTime }
             }
-            return t;
+            return t
           }),
-        );
-      }, 1000);
+        )
+      }, 1000)
     }
 
-    return () => timer && clearInterval(timer);
-  }, [tasks]);
+    return () => timer && clearInterval(timer)
+  }, [tasks])
 
   const addTask = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTask.trim()) return;
+    e.preventDefault()
+    if (!newTask.trim()) return
 
-    const timeInSeconds = newTime * 60;
+    const timeInSeconds = newTime * 60
     setTasks([
       ...tasks,
       {
@@ -81,20 +81,20 @@ export default function Home() {
         completed: false,
         paused: true, // Start paused
       },
-    ]);
-    setNewTask("");
-    setNewTime(30);
+    ])
+    setNewTask("")
+    setNewTime(30)
     // Refocus input after adding task
-    inputRef.current?.focus();
-  };
+    inputRef.current?.focus()
+  }
 
   const toggleTask = (id: number) => {
     setTasks(
       tasks.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task,
       ),
-    );
-  };
+    )
+  }
 
   const togglePause = (id: number) => {
     setTasks(
@@ -104,12 +104,12 @@ export default function Home() {
             ? { ...task, paused: !task.paused }
             : { ...task, paused: true }, // Pause all other tasks
       ),
-    );
-  };
+    )
+  }
 
   const adjustTime = (amount: number) => {
-    setNewTime((prev) => Math.max(5, prev + amount));
-  };
+    setNewTime((prev) => Math.max(5, prev + amount))
+  }
 
   const adjustTaskTime = (id: number, amount: number) => {
     setTasks(
@@ -121,19 +121,19 @@ export default function Home() {
             }
           : task,
       ),
-    );
-    setOpenDropdownId(null);
-  };
+    )
+    setOpenDropdownId(null)
+  }
 
   const deleteTask = (id: number) => {
-    setTasks(tasks.filter((task) => task.id !== id));
-  };
+    setTasks(tasks.filter((task) => task.id !== id))
+  }
 
   const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, "0")}`
+  }
 
   return (
     <div className="min-h-screen w-full bg-amber-50 p-8">
@@ -247,5 +247,5 @@ export default function Home() {
         ))}
       </div>
     </div>
-  );
+  )
 }
