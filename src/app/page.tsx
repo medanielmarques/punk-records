@@ -1,16 +1,33 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+
+interface Task {
+  id: number;
+  text: string;
+  timeRemaining: number;
+  completed: boolean;
+  paused: boolean;
+}
 
 export default function Home() {
-  const [tasks, setTasks] = useState(() => {
+  const [tasks, setTasks] = useState<Task[]>(() => {
     const savedTasks = localStorage.getItem("tasks");
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
   const [newTask, setNewTask] = useState("");
   const [newTime, setNewTime] = useState(30); // Default 30 minutes
-  const [openDropdownId, setOpenDropdownId] = useState(null);
-  const inputRef = useRef(null);
+  const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -27,10 +44,10 @@ export default function Home() {
       (task) => !task.completed && !task.paused && task.timeRemaining > 0,
     );
 
-    let timer;
+    let timer: NodeJS.Timeout | undefined;
     if (activeTask) {
       timer = setInterval(() => {
-        setTasks((prevTasks) =>
+        setTasks((prevTasks: Task[]) =>
           prevTasks.map((t) => {
             if (t.id === activeTask.id && t.timeRemaining > 0) {
               const newTime = t.timeRemaining - 1;
@@ -50,7 +67,7 @@ export default function Home() {
     return () => timer && clearInterval(timer);
   }, [tasks]);
 
-  const addTask = (e) => {
+  const addTask = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTask.trim()) return;
 
@@ -71,7 +88,7 @@ export default function Home() {
     inputRef.current?.focus();
   };
 
-  const toggleTask = (id) => {
+  const toggleTask = (id: number) => {
     setTasks(
       tasks.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task,
@@ -79,7 +96,7 @@ export default function Home() {
     );
   };
 
-  const togglePause = (id) => {
+  const togglePause = (id: number) => {
     setTasks(
       tasks.map(
         (task) =>
@@ -90,11 +107,11 @@ export default function Home() {
     );
   };
 
-  const adjustTime = (amount) => {
+  const adjustTime = (amount: number) => {
     setNewTime((prev) => Math.max(5, prev + amount));
   };
 
-  const adjustTaskTime = (id, amount) => {
+  const adjustTaskTime = (id: number, amount: number) => {
     setTasks(
       tasks.map((task) =>
         task.id === id
@@ -108,11 +125,11 @@ export default function Home() {
     setOpenDropdownId(null);
   };
 
-  const deleteTask = (id) => {
+  const deleteTask = (id: number) => {
     setTasks(tasks.filter((task) => task.id !== id));
   };
 
-  const formatTime = (seconds) => {
+  const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, "0")}`;
@@ -128,32 +145,34 @@ export default function Home() {
         onSubmit={addTask}
         className="mb-12 flex flex-col items-center gap-6"
       >
-        <input
+        <Input
           ref={inputRef}
           type="text"
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           placeholder="Enter new task..."
-          className="w-full max-w-xl rounded-lg border bg-white/50 px-6 py-3 text-lg backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+          className="w-full max-w-xl"
         />
         <div className="flex items-center gap-4">
-          <button
+          <Button
             type="button"
             onClick={() => adjustTime(-5)}
-            className="rounded-lg bg-amber-200 px-5 py-3 text-xl font-medium text-amber-700 transition-colors hover:bg-amber-300"
+            variant="secondary"
+            className="px-5 py-3 text-xl"
           >
             -5
-          </button>
+          </Button>
           <span className="w-24 text-center text-2xl font-bold text-amber-800">
             {newTime} min
           </span>
-          <button
+          <Button
             type="button"
             onClick={() => adjustTime(5)}
-            className="rounded-lg bg-amber-200 px-5 py-3 text-xl font-medium text-amber-700 transition-colors hover:bg-amber-300"
+            variant="secondary"
+            className="px-5 py-3 text-xl"
           >
             +5
-          </button>
+          </Button>
         </div>
       </form>
 
@@ -172,11 +191,10 @@ export default function Home() {
             }`}
           >
             <div className="flex flex-1 items-center gap-6">
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={task.completed}
-                onChange={() => toggleTask(task.id)}
-                className="h-6 w-6 rounded border-amber-300 focus:ring-amber-500"
+                onCheckedChange={() => toggleTask(task.id)}
+                className="h-6 w-6"
               />
               <span
                 className={`flex-1 text-lg ${
@@ -187,53 +205,44 @@ export default function Home() {
               >
                 {task.text}
               </span>
-              <button
+              <Button
                 onClick={() => togglePause(task.id)}
-                className={`rounded px-4 py-2 text-lg ${
-                  task.paused
-                    ? "bg-green-100 text-green-700"
-                    : "bg-amber-200 text-amber-700"
-                }`}
+                variant={task.paused ? "secondary" : "default"}
+                className={task.paused ? "bg-green-100" : "bg-amber-200"}
               >
                 {task.paused ? "Start" : "Pause"}
-              </button>
-              <div className="relative">
-                <button
-                  onClick={() =>
-                    setOpenDropdownId(
-                      openDropdownId === task.id ? null : task.id,
-                    )
-                  }
-                  className={`font-mono text-xl ${
-                    task.timeRemaining === 0 ? "text-red-500" : "text-amber-700"
-                  }`}
-                >
-                  {formatTime(task.timeRemaining)}
-                </button>
-                {openDropdownId === task.id && (
-                  <div className="absolute right-0 mt-2 rounded-lg border border-amber-100 bg-white py-2 shadow-lg">
-                    <button
-                      onClick={() => adjustTaskTime(task.id, 5)}
-                      className="block w-full px-4 py-2 text-left hover:bg-amber-50"
-                    >
-                      +5 min
-                    </button>
-                    <button
-                      onClick={() => adjustTaskTime(task.id, -5)}
-                      className="block w-full px-4 py-2 text-left hover:bg-amber-50"
-                    >
-                      -5 min
-                    </button>
-                  </div>
-                )}
-              </div>
+              </Button>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className={`font-mono text-xl ${
+                      task.timeRemaining === 0
+                        ? "text-red-500"
+                        : "text-amber-700"
+                    }`}
+                  >
+                    {formatTime(task.timeRemaining)}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => adjustTaskTime(task.id, 5)}>
+                    +5 min
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => adjustTaskTime(task.id, -5)}>
+                    -5 min
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
-            <button
+            <Button
               onClick={() => deleteTask(task.id)}
-              className="ml-6 text-2xl font-bold text-amber-300 transition-colors hover:text-red-500"
+              variant="ghost"
+              className="ml-6 text-2xl font-bold text-amber-300 hover:text-red-500"
             >
               ×
-            </button>
+            </Button>
           </div>
         ))}
       </div>
