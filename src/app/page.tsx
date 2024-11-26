@@ -5,19 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  DropdownMenu,
+  DropdownMenu,         
   DropdownMenuContent,
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
-interface Task {
+type Task = {
   id: number;
   text: string;
   timeRemaining: number;
   completed: boolean;
   paused: boolean;
-}
+};
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>(() => {
