@@ -97,7 +97,9 @@ export default function Home() {
   const toggleTask = (id: number) => {
     setTasks(
       tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task,
+        task.id === id
+          ? { ...task, completed: !task.completed, paused: true }
+          : task,
       ),
     )
   }
@@ -186,78 +188,87 @@ export default function Home() {
       </form>
 
       <div className="mx-auto max-w-[800px] space-y-4">
-        {tasks.map((task) => (
-          <div
-            key={task.id}
-            className={`flex items-center justify-between rounded-lg border p-6 ${
-              task.completed
-                ? "bg-gray-100 opacity-75 dark:bg-gray-800"
-                : task.timeRemaining === 0
-                  ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-gray-800/50"
-                  : task.paused
-                    ? "bg-white dark:bg-gray-800"
-                    : "bg-white/80 dark:bg-gray-800/80"
-            }`}
-          >
-            <div className="flex flex-1 items-center gap-6">
-              <Checkbox
-                checked={task.completed}
-                onCheckedChange={() => toggleTask(task.id)}
-                className="h-6 w-6"
-              />
-              <span
-                className={`flex-1 text-lg ${
-                  task.completed
-                    ? "text-gray-500 line-through dark:text-gray-400"
-                    : "text-amber-900 dark:text-amber-100"
-                }`}
-              >
-                {task.text}
-              </span>
-              <Button
-                onClick={() => togglePause(task.id)}
-                variant={task.paused ? "secondary" : "default"}
-                className={
-                  task.paused
-                    ? "bg-green-100 dark:bg-green-900"
-                    : "bg-amber-200 dark:bg-amber-800"
-                }
-              >
-                {task.paused ? "Start" : "Pause"}
-              </Button>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className={`font-mono text-xl ${
-                      task.timeRemaining === 0
-                        ? "text-red-500 dark:text-red-400"
-                        : "text-amber-700 dark:text-amber-300"
-                    }`}
-                  >
-                    {formatTime(task.timeRemaining)}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => adjustTaskTime(task.id, 5)}>
-                    +5 min
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => adjustTaskTime(task.id, -5)}>
-                    -5 min
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <Button
-              onClick={() => deleteTask(task.id)}
-              variant="ghost"
-              className="ml-6 text-2xl font-bold text-amber-300 hover:text-red-500 dark:text-amber-600 dark:hover:text-red-400"
+        {tasks
+          .sort((a, b) =>
+            a.completed === b.completed ? 0 : a.completed ? -1 : 1,
+          )
+          .map((task) => (
+            <div
+              key={task.id}
+              className={`flex items-center justify-between rounded-lg border p-6 ${
+                task.completed
+                  ? "bg-gray-100 opacity-75 dark:bg-gray-800"
+                  : task.timeRemaining === 0
+                    ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-gray-800/50"
+                    : task.paused
+                      ? "bg-white dark:bg-gray-800"
+                      : "bg-white/80 dark:bg-gray-800/80"
+              }`}
             >
-              ×
-            </Button>
-          </div>
-        ))}
+              <div className="flex flex-1 items-center gap-6">
+                <Checkbox
+                  checked={task.completed}
+                  onCheckedChange={() => toggleTask(task.id)}
+                  className="h-6 w-6"
+                />
+                <span
+                  className={`flex-1 text-lg ${
+                    task.completed
+                      ? "text-gray-500 line-through dark:text-gray-400"
+                      : "text-amber-900 dark:text-amber-100"
+                  }`}
+                >
+                  {task.text}
+                </span>
+                <Button
+                  onClick={() => togglePause(task.id)}
+                  variant={task.paused ? "secondary" : "default"}
+                  disabled={task.completed}
+                  className={
+                    task.paused
+                      ? "bg-green-100 dark:bg-green-900"
+                      : "bg-amber-200 dark:bg-amber-800"
+                  }
+                >
+                  {task.paused ? "Start" : "Pause"}
+                </Button>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className={`font-mono text-xl ${
+                        task.timeRemaining === 0
+                          ? "text-red-500 dark:text-red-400"
+                          : "text-amber-700 dark:text-amber-300"
+                      }`}
+                    >
+                      {formatTime(task.timeRemaining)}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem
+                      onClick={() => adjustTaskTime(task.id, 5)}
+                    >
+                      +5 min
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => adjustTaskTime(task.id, -5)}
+                    >
+                      -5 min
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <Button
+                onClick={() => deleteTask(task.id)}
+                variant="ghost"
+                className="ml-6 text-2xl font-bold text-amber-300 hover:text-red-500 dark:text-amber-600 dark:hover:text-red-400"
+              >
+                ×
+              </Button>
+            </div>
+          ))}
       </div>
     </div>
   )
