@@ -143,7 +143,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full bg-amber-50 p-8 dark:bg-gray-900">
-      <div className="mb-12 flex items-center justify-between">
+      <div className="mb-12 flex items-center justify-center gap-8">
         <h1 className="text-4xl font-bold text-amber-800 dark:text-amber-200">
           tokitoki.app
         </h1>
