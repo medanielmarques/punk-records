@@ -1,5 +1,6 @@
 "use client"
 
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -141,10 +142,13 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-amber-50 p-8">
-      <h1 className="mb-12 text-center text-4xl font-bold text-amber-800">
-        tokitoki.app
-      </h1>
+    <div className="min-h-screen w-full bg-amber-50 p-8 dark:bg-gray-900">
+      <div className="mb-12 flex items-center justify-between">
+        <h1 className="text-4xl font-bold text-amber-800 dark:text-amber-200">
+          tokitoki.app
+        </h1>
+        <ThemeToggle />
+      </div>
 
       <form
         onSubmit={addTask}
@@ -187,12 +191,12 @@ export default function Home() {
             key={task.id}
             className={`flex items-center justify-between rounded-lg border p-6 ${
               task.completed
-                ? "bg-gray-100 opacity-75"
+                ? "bg-gray-100 opacity-75 dark:bg-gray-800"
                 : task.timeRemaining === 0
-                  ? "border-red-200 bg-red-50"
+                  ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-gray-800/50"
                   : task.paused
-                    ? "bg-amber-50"
-                    : "bg-amber-50/70"
+                    ? "bg-white dark:bg-gray-800"
+                    : "bg-white/80 dark:bg-gray-800/80"
             }`}
           >
             <div className="flex flex-1 items-center gap-6">
@@ -204,8 +208,8 @@ export default function Home() {
               <span
                 className={`flex-1 text-lg ${
                   task.completed
-                    ? "text-gray-500 line-through"
-                    : "text-amber-900"
+                    ? "text-gray-500 line-through dark:text-gray-400"
+                    : "text-amber-900 dark:text-amber-100"
                 }`}
               >
                 {task.text}
@@ -213,7 +217,11 @@ export default function Home() {
               <Button
                 onClick={() => togglePause(task.id)}
                 variant={task.paused ? "secondary" : "default"}
-                className={task.paused ? "bg-green-100" : "bg-amber-200"}
+                className={
+                  task.paused
+                    ? "bg-green-100 dark:bg-green-900"
+                    : "bg-amber-200 dark:bg-amber-800"
+                }
               >
                 {task.paused ? "Start" : "Pause"}
               </Button>
@@ -224,8 +232,8 @@ export default function Home() {
                     variant="ghost"
                     className={`font-mono text-xl ${
                       task.timeRemaining === 0
-                        ? "text-red-500"
-                        : "text-amber-700"
+                        ? "text-red-500 dark:text-red-400"
+                        : "text-amber-700 dark:text-amber-300"
                     }`}
                   >
                     {formatTime(task.timeRemaining)}
@@ -244,7 +252,7 @@ export default function Home() {
             <Button
               onClick={() => deleteTask(task.id)}
               variant="ghost"
-              className="ml-6 text-2xl font-bold text-amber-300 hover:text-red-500"
+              className="ml-6 text-2xl font-bold text-amber-300 hover:text-red-500 dark:text-amber-600 dark:hover:text-red-400"
             >
               ×
             </Button>

@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/components/theme-provider"
 import "@/styles/globals.css"
 import { TRPCReactProvider } from "@/trpc/react"
 import { GeistSans } from "geist/font/sans"
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
