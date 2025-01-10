@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Task } from "@/types/task"
 import { format } from "date-fns"
+import { Pause, Play } from "lucide-react"
 
 interface TaskItemProps {
   task: Task
@@ -33,11 +34,11 @@ export function TaskItem({
         task.completed
           ? "bg-gray-100 opacity-75 dark:bg-gray-800"
           : task.timeRemaining === 0
-            ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-gray-800/50"
+            ? "border-amber-200 bg-amber-50 dark:border-amber-700 dark:bg-amber-900/30"
             : task.paused
               ? "bg-white dark:bg-gray-800"
               : "bg-white/80 dark:bg-gray-800/80"
-      } ${isParent ? "border-amber-300 dark:border-amber-700" : ""}`}
+      } ${isParent ? "border-amber-300 dark:border-gray-400" : ""}`}
     >
       <div className="flex flex-1 items-center gap-6">
         {!isParent && (
@@ -68,15 +69,15 @@ export function TaskItem({
           <>
             <Button
               onClick={() => onPause(task.id)}
-              variant={task.paused ? "secondary" : "default"}
+              variant="outline"
               disabled={task.completed}
-              className={
-                task.paused
-                  ? "bg-green-100 dark:bg-green-900"
-                  : "bg-amber-200 dark:bg-amber-800"
-              }
+              className="w-10 p-2"
             >
-              {task.paused ? "Start" : "Pause"}
+              {task.paused ? (
+                <Play className="h-4 w-4 text-green-600 dark:text-green-400" />
+              ) : (
+                <Pause className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+              )}
             </Button>
 
             <TimeDropdown
@@ -89,7 +90,7 @@ export function TaskItem({
           <Button
             onClick={() => onAddChild(task.id)}
             variant="outline"
-            className="border-amber-200 hover:bg-amber-100 dark:border-amber-800 dark:hover:bg-amber-900"
+            className="border-amber-200 hover:bg-amber-100 dark:border-gray-800 dark:hover:bg-gray-900"
           >
             Add Task
           </Button>
@@ -98,7 +99,7 @@ export function TaskItem({
       <Button
         onClick={() => onDelete(task.id)}
         variant="ghost"
-        className="ml-6 text-2xl font-bold text-amber-300 hover:text-red-500 dark:text-amber-600 dark:hover:text-red-400"
+        className="ml-6 text-2xl font-bold text-red-300 hover:text-red-500 dark:text-red-600 dark:hover:text-red-400"
       >
         ×
       </Button>
