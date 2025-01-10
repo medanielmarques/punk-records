@@ -9,11 +9,13 @@ import { formatTime } from "@/lib/utils"
 import { Button } from "./ui/button"
 
 interface TimeDropdownProps {
-  timeRemaining: number
+  timeRemaining: number | null
   onAdjust: (amount: number) => void
 }
 
 export function TimeDropdown({ timeRemaining, onAdjust }: TimeDropdownProps) {
+  if (timeRemaining === null) return null
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

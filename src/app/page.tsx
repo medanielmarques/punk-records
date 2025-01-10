@@ -35,15 +35,23 @@ export default function Home() {
   useEffect(() => {
     // Find the first active task
     const activeTask = tasks.find(
-      (task) => !task.completed && !task.paused && task.timeRemaining > 0,
+      (task) =>
+        !task.completed &&
+        !task.paused &&
+        task.timeRemaining !== null &&
+        task.timeRemaining > 0,
     )
 
     let timer: NodeJS.Timeout | undefined
-    if (activeTask) {
+    if (activeTask && activeTask.timeRemaining !== null) {
       timer = setInterval(() => {
         setTasks((prevTasks: Task[]) =>
           prevTasks.map((t) => {
-            if (t.id === activeTask.id && t.timeRemaining > 0) {
+            if (
+              t.id === activeTask.id &&
+              t.timeRemaining !== null &&
+              t.timeRemaining > 0
+            ) {
               const newTime = t.timeRemaining - 1
               if (newTime === 0) {
                 new Audio(
@@ -66,18 +74,62 @@ export default function Home() {
     if (!newTask.trim()) return
 
     const timeInSeconds = newTime * 60
+    const now = Date.now()
+
+    // If the task starts with "+" it's a parent task
+    const isParent = newTask.startsWith("+")
+    const taskText = isParent ? newTask.slice(1).trim() : newTask
 
     setTasks([
       ...tasks,
       {
-        id: Date.now(),
-        text: newTask,
-        timeRemaining: timeInSeconds,
+        id: now,
+        text: taskText,
+        timeRemaining: isParent ? null : timeInSeconds,
         completed: false,
         paused: true,
         date: getCurrentFormattedDate(),
+        timestamp: now,
+        isParent,
+        parentId: null,
+        children: isParent ? [] : undefined,
       },
     ])
+    setNewTask("")
+    setNewTime(30)
+    inputRef.current?.focus()
+  }
+
+  const handleAddChildTask = (parentId: number) => {
+    if (!newTask.trim()) return
+
+    const timeInSeconds = newTime * 60
+    const now = Date.now()
+
+    setTasks((prevTasks) => {
+      const newTasks = [
+        ...prevTasks,
+        {
+          id: now,
+          text: newTask,
+          timeRemaining: timeInSeconds,
+          completed: false,
+          paused: true,
+          date: getCurrentFormattedDate(),
+          timestamp: now,
+          isParent: false,
+          parentId,
+        },
+      ]
+
+      // Update parent's children array
+      return newTasks.map((task) =>
+        task.id === parentId
+          ? { ...task, children: [...(task.children || []), now] }
+          : task,
+      )
+    })
+
     setNewTask("")
     setNewTime(30)
     inputRef.current?.focus()
@@ -111,7 +163,7 @@ export default function Home() {
   const adjustTaskTime = (id: number, amount: number) => {
     setTasks(
       tasks.map((task) =>
-        task.id === id
+        task.id === id && task.timeRemaining !== null
           ? {
               ...task,
               timeRemaining: Math.max(0, task.timeRemaining + amount * 60),
@@ -145,6 +197,7 @@ export default function Home() {
           onPause={togglePause}
           onTimeAdjust={adjustTaskTime}
           onDelete={deleteTask}
+          onAddChild={handleAddChildTask}
         />
 
         <CompletedTasks
