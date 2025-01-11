@@ -5,6 +5,7 @@ import { Button } from "./ui/button"
 
 interface CompletedTasksProps {
   tasks: Task[]
+  allTasks: Task[]
   showCompleted: boolean
   onToggleShow: (show: boolean) => void
   onToggle: (id: number) => void
@@ -16,6 +17,7 @@ interface CompletedTasksProps {
 
 export function CompletedTasks({
   tasks,
+  allTasks,
   showCompleted,
   onToggleShow,
   onToggle,
@@ -26,6 +28,11 @@ export function CompletedTasks({
 }: CompletedTasksProps) {
   if (tasks.length === 0) {
     return null
+  }
+
+  const findParentTask = (task: Task) => {
+    if (!task.parentId) return null
+    return allTasks.find((t) => t.id === task.parentId) || null
   }
 
   return (
@@ -54,6 +61,7 @@ export function CompletedTasks({
               onTimeAdjust={onTimeAdjust}
               onDelete={onDelete}
               onRename={onRename}
+              parentTask={findParentTask(task)}
             />
           ))}
         </div>

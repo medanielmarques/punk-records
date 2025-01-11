@@ -209,6 +209,7 @@ export default function Home() {
 
         <CompletedTasks
           tasks={tasks.filter((task) => task.completed)}
+          allTasks={tasks}
           showCompleted={showCompleted}
           onToggleShow={setShowCompleted}
           onToggle={toggleTask}
