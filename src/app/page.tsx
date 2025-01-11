@@ -177,6 +177,12 @@ export default function Home() {
     setTasks(tasks.filter((task) => task.id !== id))
   }
 
+  const renameTask = (id: number, newName: string) => {
+    setTasks(
+      tasks.map((task) => (task.id === id ? { ...task, text: newName } : task)),
+    )
+  }
+
   return (
     <div className="min-h-screen w-full bg-amber-50 p-8 dark:bg-gray-900">
       <Header />
@@ -198,6 +204,7 @@ export default function Home() {
           onTimeAdjust={adjustTaskTime}
           onDelete={deleteTask}
           onAddChild={handleAddChildTask}
+          onRename={renameTask}
         />
 
         <CompletedTasks
@@ -208,6 +215,7 @@ export default function Home() {
           onPause={togglePause}
           onTimeAdjust={adjustTaskTime}
           onDelete={deleteTask}
+          onRename={renameTask}
         />
       </div>
     </div>

@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Task } from "@/types/task"
 import { format } from "date-fns"
 import { Pause, Play } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 
 interface TaskItemProps {
   task: Task
@@ -12,6 +13,7 @@ interface TaskItemProps {
   onTimeAdjust: (id: number, amount: number) => void
   onDelete: (id: number) => void
   onAddChild?: (parentId: number) => void
+  onRename: (id: number, newName: string) => void
   isParent?: boolean
 }
 
@@ -22,11 +24,43 @@ export function TaskItem({
   onTimeAdjust,
   onDelete,
   onAddChild,
+  onRename,
   isParent,
 }: TaskItemProps) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedText, setEditedText] = useState(task.text)
+  const inputRef = useRef<HTMLInputElement>(null)
+
   const formattedTime = task.timestamp
     ? format(new Date(task.timestamp), "h:mm a")
     : ""
+
+  const handleDoubleClick = () => {
+    setIsEditing(true)
+  }
+
+  const handleBlur = () => {
+    if (editedText.trim() && editedText !== task.text) {
+      onRename(task.id, editedText.trim())
+    }
+    setIsEditing(false)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleBlur()
+    } else if (e.key === "Escape") {
+      setEditedText(task.text)
+      setIsEditing(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isEditing) {
+      inputRef.current?.focus()
+      inputRef.current?.select()
+    }
+  }, [isEditing])
 
   return (
     <div
@@ -48,17 +82,29 @@ export function TaskItem({
             className="h-6 w-6"
           />
         )}
-        <span
-          className={`flex-1 text-lg ${
-            task.completed
-              ? "text-gray-500 line-through dark:text-gray-400"
-              : isParent
-                ? "font-semibold text-amber-700 dark:text-amber-300"
-                : "text-amber-900 dark:text-amber-100"
-          }`}
-        >
-          {task.text}
-        </span>
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            value={editedText}
+            onChange={(e) => setEditedText(e.target.value)}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+            className="flex-1 rounded border px-2 py-1 text-lg focus:outline-amber-500"
+          />
+        ) : (
+          <span
+            onDoubleClick={handleDoubleClick}
+            className={`flex-1 cursor-text text-lg ${
+              task.completed
+                ? "text-gray-500 line-through dark:text-gray-400"
+                : isParent
+                  ? "font-semibold text-amber-700 dark:text-amber-300"
+                  : "text-amber-900 dark:text-amber-100"
+            }`}
+          >
+            {task.text}
+          </span>
+        )}
         <span
           className="text-xs text-gray-500 dark:text-gray-400"
           title={`Created at ${formattedTime}`}

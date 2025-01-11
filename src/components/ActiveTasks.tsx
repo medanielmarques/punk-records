@@ -9,6 +9,7 @@ interface ActiveTasksProps {
   onTimeAdjust: (id: number, amount: number) => void
   onDelete: (id: number) => void
   onAddChild?: (parentId: number) => void
+  onRename: (id: number, newName: string) => void
 }
 
 export function ActiveTasks({
@@ -18,6 +19,7 @@ export function ActiveTasks({
   onTimeAdjust,
   onDelete,
   onAddChild,
+  onRename,
 }: ActiveTasksProps) {
   if (tasks.length === 0) {
     return null
@@ -47,6 +49,7 @@ export function ActiveTasks({
             onTimeAdjust={onTimeAdjust}
             onDelete={onDelete}
             onAddChild={onAddChild}
+            onRename={onRename}
             isParent
           />
           <div className="ml-6 space-y-2 border-l-2 border-amber-200 pl-4">
@@ -58,6 +61,7 @@ export function ActiveTasks({
                 onPause={onPause}
                 onTimeAdjust={onTimeAdjust}
                 onDelete={onDelete}
+                onRename={onRename}
               />
             ))}
           </div>
@@ -73,6 +77,7 @@ export function ActiveTasks({
           onPause={onPause}
           onTimeAdjust={onTimeAdjust}
           onDelete={onDelete}
+          onRename={onRename}
         />
       ))}
     </div>
