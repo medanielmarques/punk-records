@@ -10,6 +10,7 @@ interface ActiveTasksProps {
   onAddChild?: (parentId: number) => void
   onRename: (id: number, newName: string) => void
   onReset: (id: number) => void
+  newTaskText: string
 }
 
 export function ActiveTasks({
@@ -21,6 +22,7 @@ export function ActiveTasks({
   onAddChild,
   onRename,
   onReset,
+  newTaskText,
 }: ActiveTasksProps) {
   if (tasks.length === 0) {
     return null
@@ -52,6 +54,7 @@ export function ActiveTasks({
             onAddChild={onAddChild}
             onRename={onRename}
             isParent
+            newTaskText={newTaskText}
           />
           <div className="ml-6 space-y-2 border-l-2 border-amber-200 pl-4">
             {getChildTasks(parent.id).map((child) => (

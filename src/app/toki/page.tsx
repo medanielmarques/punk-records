@@ -46,6 +46,7 @@ export default function Toki() {
           onAddChild={handleAddChildTask}
           onRename={renameTask}
           onReset={resetTask}
+          newTaskText={newTask}
         />
 
         <CompletedTasks

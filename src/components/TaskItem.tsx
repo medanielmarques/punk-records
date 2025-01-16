@@ -15,6 +15,7 @@ interface TaskItemProps {
   onReset?: (id: number) => void
   isParent?: boolean
   parentTask?: Task | null
+  newTaskText?: string
 }
 
 export function TaskItem({
@@ -28,6 +29,7 @@ export function TaskItem({
   onReset,
   isParent,
   parentTask,
+  newTaskText,
 }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editedText, setEditedText] = useState(task.text)
@@ -114,7 +116,7 @@ export function TaskItem({
               </>
             )}
 
-            {isParent && onAddChild && (
+            {isParent && onAddChild && newTaskText?.trim() && (
               <Button
                 onClick={() => onAddChild(task.id)}
                 variant="outline"
