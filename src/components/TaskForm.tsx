@@ -1,3 +1,4 @@
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { RefObject } from "react"
@@ -49,6 +50,7 @@ export function TaskForm({
         </Button>
       </div>
       <Button type="submit">Add Task</Button>
+      <ThemeToggle />
     </form>
   )
 }
