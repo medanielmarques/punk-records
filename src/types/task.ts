@@ -2,6 +2,7 @@ export type Task = {
   id: number
   text: string
   timeRemaining: number | null // null for parent tasks
+  initialTimeRemaining: number | null // null for parent tasks
   completed: boolean
   paused: boolean
   date: string

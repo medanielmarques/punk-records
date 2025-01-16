@@ -146,7 +146,11 @@ export function TaskItem({
                 onClick={() => onPause(task.id)}
                 className="text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
               >
-                {task.paused ? "Resume" : "Pause"}
+                {task.paused
+                  ? task.timeRemaining === task.initialTimeRemaining
+                    ? "Start"
+                    : "Resume"
+                  : "Pause"}
               </button>
               {onReset && (
                 <button
@@ -161,6 +165,13 @@ export function TaskItem({
                 className="text-xs text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400"
               >
                 Delete
+              </button>
+
+              <button
+                onClick={() => onDelete(task.id)}
+                className="text-xs text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400"
+              >
+                Reset
               </button>
             </div>
             <div className="ml-auto">
