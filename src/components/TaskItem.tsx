@@ -123,13 +123,6 @@ export function TaskItem({
                 Add Task
               </Button>
             )}
-
-            <span
-              className="text-xs text-gray-500 dark:text-gray-400"
-              title={`Created at ${formattedTime}`}
-            >
-              {!isParent && task.date}
-            </span>
           </div>
         </div>
 
@@ -152,6 +145,12 @@ export function TaskItem({
                     : "Resume"
                   : "Pause"}
               </button>
+              <button
+                onClick={() => onDelete(task.id)}
+                className="text-xs text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400"
+              >
+                Delete
+              </button>
               {onReset && (
                 <button
                   onClick={() => onReset(task.id)}
@@ -160,19 +159,12 @@ export function TaskItem({
                   Reset
                 </button>
               )}
-              <button
-                onClick={() => onDelete(task.id)}
-                className="text-xs text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400"
+              <span
+                className="text-xs text-gray-500 dark:text-gray-400"
+                title={`Created at ${formattedTime}`}
               >
-                Delete
-              </button>
-
-              <button
-                onClick={() => onDelete(task.id)}
-                className="text-xs text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400"
-              >
-                Reset
-              </button>
+                {!isParent && task.date}
+              </span>
             </div>
             <div className="ml-auto">
               <TimeDropdown

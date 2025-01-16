@@ -13,6 +13,7 @@ interface CompletedTasksProps {
   onTimeAdjust: (id: number, amount: number) => void
   onDelete: (id: number) => void
   onRename: (id: number, newName: string) => void
+  onReset: (id: number) => void
 }
 
 export function CompletedTasks({
@@ -25,6 +26,7 @@ export function CompletedTasks({
   onTimeAdjust,
   onDelete,
   onRename,
+  onReset,
 }: CompletedTasksProps) {
   if (tasks.length === 0) {
     return null
@@ -88,6 +90,7 @@ export function CompletedTasks({
                     onTimeAdjust={onTimeAdjust}
                     onDelete={onDelete}
                     onRename={onRename}
+                    onReset={onReset}
                   />
                 ))}
               </div>

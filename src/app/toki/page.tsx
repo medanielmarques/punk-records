@@ -20,6 +20,7 @@ export default function Toki() {
     adjustTaskTime,
     deleteTask,
     renameTask,
+    resetTask,
     setShowCompleted,
     setNewTask,
   } = useTasks()
@@ -44,6 +45,7 @@ export default function Toki() {
           onDelete={deleteTask}
           onAddChild={handleAddChildTask}
           onRename={renameTask}
+          onReset={resetTask}
         />
 
         <CompletedTasks
@@ -56,6 +58,7 @@ export default function Toki() {
           onTimeAdjust={adjustTaskTime}
           onDelete={deleteTask}
           onRename={renameTask}
+          onReset={resetTask}
         />
       </div>
     </div>

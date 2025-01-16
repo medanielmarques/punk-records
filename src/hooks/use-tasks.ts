@@ -179,6 +179,16 @@ export const useTasks = () => {
     )
   }
 
+  const resetTask = (id: number) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id && task.initialTimeRemaining !== null
+          ? { ...task, timeRemaining: task.initialTimeRemaining, paused: true }
+          : task,
+      ),
+    )
+  }
+
   return {
     tasks,
     newTask,
@@ -193,6 +203,7 @@ export const useTasks = () => {
     adjustTaskTime,
     deleteTask,
     renameTask,
+    resetTask,
     setShowCompleted,
     setNewTask,
     setNewTime,
