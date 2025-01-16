@@ -24,7 +24,10 @@ export function TimeDropdown({ timeRemaining, onAdjust }: TimeDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-24 border-transparent font-mono">
+        <Button
+          variant="outline"
+          className="w-24 border-transparent font-mono text-sm"
+        >
           {formatTime(timeRemaining)}
         </Button>
       </DropdownMenuTrigger>

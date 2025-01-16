@@ -76,7 +76,7 @@ export function TaskItem({
         </div>
       )}
       <div
-        className={`flex flex-col rounded-lg border p-4 ${
+        className={`flex rounded-lg border p-4 ${
           task.completed
             ? "bg-gray-100 opacity-75 dark:bg-gray-800"
             : task.timeRemaining === 0
@@ -86,8 +86,8 @@ export function TaskItem({
                 : "bg-white/80 dark:bg-gray-800/80"
         } ${isParent ? "border-amber-300 dark:border-gray-400" : ""}`}
       >
-        <div className="flex items-center justify-between">
-          <div className="flex flex-1 items-center gap-4">
+        <div className="flex flex-1 flex-col gap-2">
+          <div className="flex items-center gap-4">
             {isEditing ? (
               <input
                 ref={inputRef}
@@ -118,17 +118,15 @@ export function TaskItem({
               <Button
                 onClick={() => onAddChild(task.id)}
                 variant="outline"
-                className="mt-2 border-amber-200 hover:bg-amber-100 dark:border-gray-800 dark:hover:bg-gray-900"
+                className="border-amber-200 hover:bg-amber-100 dark:border-gray-800 dark:hover:bg-gray-900"
               >
                 Add Task
               </Button>
             )}
           </div>
-        </div>
 
-        {!isParent && (
-          <div className="mt-2 flex items-center gap-4">
-            <div className="flex gap-4">
+          {!isParent && (
+            <div className="flex items-center gap-4">
               <button
                 onClick={() => onToggle(task.id)}
                 className="text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
@@ -166,12 +164,14 @@ export function TaskItem({
                 {!isParent && task.date}
               </span>
             </div>
-            <div className="ml-auto">
-              <TimeDropdown
-                timeRemaining={task.timeRemaining}
-                onAdjust={(amount) => onTimeAdjust(task.id, amount)}
-              />
-            </div>
+          )}
+        </div>
+        {!isParent && (
+          <div className="ml-4 flex items-center">
+            <TimeDropdown
+              timeRemaining={task.timeRemaining}
+              onAdjust={(amount) => onTimeAdjust(task.id, amount)}
+            />
           </div>
         )}
       </div>
