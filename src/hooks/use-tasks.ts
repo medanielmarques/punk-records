@@ -163,6 +163,10 @@ export const useTasks = () => {
           ? {
               ...task,
               timeRemaining: Math.max(0, task.timeRemaining + amount * 60),
+              initialTimeRemaining: Math.max(
+                0,
+                task.timeRemaining + amount * 60,
+              ),
             }
           : task,
       ),

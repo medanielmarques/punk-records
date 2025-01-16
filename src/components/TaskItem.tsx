@@ -80,12 +80,12 @@ export function TaskItem({
       <div
         className={`flex rounded-lg border p-4 ${
           task.completed
-            ? "bg-gray-100 opacity-75 dark:bg-gray-800"
+            ? "bg-amber-100/50 opacity-75 dark:bg-gray-800"
             : task.timeRemaining === 0
               ? "border-amber-200 bg-amber-50 dark:border-amber-700 dark:bg-amber-900/30"
               : task.paused
-                ? "bg-white dark:bg-gray-800"
-                : "bg-white/80 dark:bg-gray-800/80"
+                ? "bg-amber-100 dark:bg-gray-800"
+                : "bg-amber-100/80 dark:bg-gray-800/80"
         } ${isParent ? "border-amber-300 dark:border-gray-400" : ""}`}
       >
         <div className="flex flex-1 flex-col gap-2">
@@ -105,7 +105,7 @@ export function TaskItem({
                   onDoubleClick={handleDoubleClick}
                   className={`flex-1 cursor-text text-lg ${
                     task.completed
-                      ? "text-gray-500 line-through dark:text-gray-400"
+                      ? "text-gray-700 dark:text-gray-400"
                       : isParent
                         ? "font-semibold text-gray-700 dark:text-gray-300"
                         : "text-gray-800 dark:text-gray-100"
