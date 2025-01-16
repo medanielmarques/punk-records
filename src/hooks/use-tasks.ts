@@ -1,12 +1,12 @@
 import { getCurrentFormattedDate } from "@/lib/utils"
-import { Task } from "@/types/task"
+import { type Task } from "@/types/task"
 import { useEffect, useRef, useState } from "react"
 
 export const useTasks = () => {
   const [tasks, setTasks] = useState<Task[]>(() => {
     if (typeof window !== "undefined") {
       const savedTasks = localStorage.getItem("tasks")
-      return savedTasks ? JSON.parse(savedTasks) : []
+      return savedTasks ? (JSON.parse(savedTasks) as Task[]) : []
     }
     return []
   })
@@ -48,7 +48,7 @@ export const useTasks = () => {
             ) {
               const newTime = t.timeRemaining - 1
               if (newTime === 0) {
-                new Audio(
+                void new Audio(
                   "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3",
                 ).play()
               }
@@ -121,7 +121,7 @@ export const useTasks = () => {
       // Update parent's children array
       return newTasks.map((task) =>
         task.id === parentId
-          ? { ...task, children: [...(task.children || []), now] }
+          ? { ...task, children: [...(task.children ?? []), now] }
           : task,
       )
     })

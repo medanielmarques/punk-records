@@ -1,4 +1,4 @@
-import { Task } from "@/types/task"
+import { type Task } from "@/types/task"
 
 import { TaskItem } from "./TaskItem"
 import { Button } from "./ui/button"
@@ -34,7 +34,7 @@ export function CompletedTasks({
 
   const findParentTask = (task: Task) => {
     if (!task.parentId) return null
-    return allTasks.find((t) => t.id === task.parentId) || null
+    return allTasks.find((t) => t.id === task.parentId) ?? null
   }
 
   // Group tasks by parent

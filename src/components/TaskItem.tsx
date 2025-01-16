@@ -1,6 +1,6 @@
 import { TimeDropdown } from "@/components/TimeDropdown"
 import { Button } from "@/components/ui/button"
-import { Task } from "@/types/task"
+import { type Task } from "@/types/task"
 import { format } from "date-fns"
 import { useEffect, useRef, useState } from "react"
 

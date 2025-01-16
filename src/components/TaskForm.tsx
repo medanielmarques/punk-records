@@ -1,7 +1,7 @@
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { RefObject } from "react"
+import { type RefObject } from "react"
 
 interface TaskFormProps {
   newTask: string
