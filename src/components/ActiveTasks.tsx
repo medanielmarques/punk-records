@@ -36,7 +36,7 @@ export function ActiveTasks({
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold text-amber-900 dark:text-amber-100">
-        Active Tasks
+        To-Do
       </h2>
 
       {/* Parent tasks with their children */}

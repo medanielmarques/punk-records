@@ -16,6 +16,11 @@ interface TimeDropdownProps {
 export function TimeDropdown({ timeRemaining, onAdjust }: TimeDropdownProps) {
   if (timeRemaining === null) return null
 
+  const handleAdjust = (amount: number) => {
+    onAdjust(amount)
+    // Removed autoclose behavior by not closing dropdown after click
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,17 +29,17 @@ export function TimeDropdown({ timeRemaining, onAdjust }: TimeDropdownProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem onClick={() => onAdjust(5)}>
-          +5 minutes
+        <DropdownMenuItem
+          onClick={() => handleAdjust(-10)}
+          onSelect={(e) => e.preventDefault()}
+        >
+          -10 minutes
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onAdjust(15)}>
-          +15 minutes
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onAdjust(-5)}>
-          -5 minutes
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onAdjust(-15)}>
-          -15 minutes
+        <DropdownMenuItem
+          onClick={() => handleAdjust(10)}
+          onSelect={(e) => e.preventDefault()}
+        >
+          +10 minutes
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

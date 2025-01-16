@@ -35,7 +35,7 @@ export function TaskForm({
           type="button"
           onClick={() => onTimeAdjust(-5)}
           variant="outline"
-          className="px-3"
+          className="px-4"
         >
           -
         </Button>
@@ -44,12 +44,12 @@ export function TaskForm({
           type="button"
           onClick={() => onTimeAdjust(5)}
           variant="outline"
-          className="px-3"
+          className="px-4"
         >
           +
         </Button>
       </div>
-      <Button type="submit">Add Task</Button>
+      {/* <Button type="submit">Add Task</Button> */}
       <ThemeToggle />
     </form>
   )
