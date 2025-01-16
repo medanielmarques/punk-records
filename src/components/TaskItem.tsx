@@ -105,8 +105,8 @@ export function TaskItem({
                     task.completed
                       ? "text-gray-500 line-through dark:text-gray-400"
                       : isParent
-                        ? "font-semibold text-amber-700 dark:text-amber-300"
-                        : "text-amber-900 dark:text-amber-100"
+                        ? "font-semibold text-gray-700 dark:text-gray-300"
+                        : "text-gray-800 dark:text-gray-100"
                   }`}
                 >
                   {task.text}
@@ -126,30 +126,32 @@ export function TaskItem({
           </div>
 
           {!isParent && (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => onToggle(task.id)}
                 className="text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
               >
                 {task.completed ? "Undo" : "Done"}
               </button>
-              <button
-                onClick={() => onPause(task.id)}
-                className="text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
-              >
-                {task.paused
-                  ? task.timeRemaining === task.initialTimeRemaining
-                    ? "Start"
-                    : "Resume"
-                  : "Pause"}
-              </button>
+              {!task.completed && (
+                <button
+                  onClick={() => onPause(task.id)}
+                  className="text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  {task.paused
+                    ? task.timeRemaining === task.initialTimeRemaining
+                      ? "Start"
+                      : "Resume"
+                    : "Pause"}
+                </button>
+              )}
               <button
                 onClick={() => onDelete(task.id)}
                 className="text-xs text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400"
               >
                 Delete
               </button>
-              {onReset && (
+              {task.initialTimeRemaining !== task.timeRemaining && onReset && (
                 <button
                   onClick={() => onReset(task.id)}
                   className="text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
