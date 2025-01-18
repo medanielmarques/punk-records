@@ -2,6 +2,8 @@ import { getCurrentFormattedDate } from "@/lib/utils"
 import { type Task } from "@/types/task"
 import { useEffect, useRef, useState } from "react"
 
+const DEFAULT_TASK_TIME = 10
+
 export const useTasks = () => {
   const [tasks, setTasks] = useState<Task[]>(() => {
     if (typeof window !== "undefined") {
@@ -11,7 +13,7 @@ export const useTasks = () => {
     return []
   })
   const [newTask, setNewTask] = useState("")
-  const [newTime, setNewTime] = useState(10) // Default 10 minutes
+  const [newTime, setNewTime] = useState(DEFAULT_TASK_TIME)
   const inputRef = useRef<HTMLInputElement>(null)
   const [showCompleted, setShowCompleted] = useState(false)
 
@@ -91,7 +93,7 @@ export const useTasks = () => {
       },
     ])
     setNewTask("")
-    setNewTime(30)
+    setNewTime(DEFAULT_TASK_TIME)
     inputRef.current?.focus()
   }
 
